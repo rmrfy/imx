@@ -10,6 +10,7 @@ struct IMX {
     int width, height;
     vector<uint8_t> data;
 
+    // load imx file from disk
     IMX(const string &filename) {
         ifstream file(filename, ios::binary);
         if (!file) {
@@ -17,10 +18,14 @@ struct IMX {
             exit(1);
         }
 
+        // get image width and height
         file.read(reinterpret_cast<char *>(&width), sizeof(width));
         file.read(reinterpret_cast<char *>(&height), sizeof(height));
 
+        // resize image vector to hold pixel data (3 bytes per pixel for rgb)
         data.resize(width * height * 3);
+
+        // get pixel data
         file.read(reinterpret_cast<char *>(data.data()), data.size());
 
         if (!file) {
@@ -29,6 +34,7 @@ struct IMX {
         }
     }
 
+    // convert imx (binary) data to opencv mat
     Mat toMat() {
         return Mat(height, width, CV_8UC3, data.data());
     }

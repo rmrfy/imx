@@ -24,6 +24,7 @@ struct IMX {
         data[index + 2] = b;
     }
 
+    // save image as imx (binary)
     void save(const string &filename) {
         ofstream file(filename, ios::binary);
         file.write(reinterpret_cast<char *>(&width), sizeof(width));
@@ -31,6 +32,7 @@ struct IMX {
         file.write(reinterpret_cast<char *>(data.data()), data.size());
     }
 
+    // save image as ppm
     void saveAsPPM(const string &filename) {
         ofstream file(filename);
         file << "P3\n"
@@ -43,6 +45,7 @@ struct IMX {
 };
 
 int main() {
+    // test image
     int width = 200, height = 200;
     IMX img(width, height);
 
