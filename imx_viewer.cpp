@@ -12,12 +12,21 @@ struct IMX {
 
     IMX(const string &filename) {
         ifstream file(filename, ios::binary);
+        if (!file) {
+            cerr << "Error while opening file: " << filename << endl;
+            exit(1);
+        }
 
         file.read(reinterpret_cast<char *>(&width), sizeof(width));
         file.read(reinterpret_cast<char *>(&height), sizeof(height));
 
         data.resize(width * height * 3);
         file.read(reinterpret_cast<char *>(data.data()), data.size());
+
+        if (!file) {
+            cerr << "Error while reading file" << endl;
+            exit(1);
+        }
     }
 
     Mat toMat() {
@@ -26,6 +35,11 @@ struct IMX {
 };
 
 int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        cout << "Usage: " << argv[0] << " <image.imx>" << endl;
+        return 1;
+    }
+
     string filename = argv[1];
     IMX img(filename);
 
