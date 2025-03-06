@@ -50,6 +50,10 @@ int main(int argc, char *argv[]) {
     IMX img(filename);
 
     Mat image = img.toMat();
+
+    // by default, opencv uses BGR, so needs to convert RGB to BGR before displaying image
+    cvtColor(image, image, COLOR_RGB2BGR);
+
     imshow("IMX Viewer", image);
     waitKey(0);
 
