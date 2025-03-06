@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 // features / thoughts
 // png, jpg to imx converter (one to one pixel mapping)
 // imx to jpg,png converter
@@ -10,11 +12,11 @@
 
 struct IMX {
     int width, height;
-    std::vector<int> data;
+    vector<uint8_t> data;
 
     IMX(int w, int h) : width(w), height(h), data(w * h * 3, 0) {}
 
-    void setPixel(int x, int y, int r, int g, int b) {
+    void setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
         if (x < 0 || x >= width || y < 0 || y >= height) return;
         int index = (y * width + x) * 3;
         data[index] = r;
@@ -22,15 +24,15 @@ struct IMX {
         data[index + 2] = b;
     }
 
-    void save(const std::string &filename) {
-        std::ofstream file(filename, std::ios::binary);
+    void save(const string &filename) {
+        ofstream file(filename, ios::binary);
         file.write(reinterpret_cast<char *>(&width), sizeof(width));
         file.write(reinterpret_cast<char *>(&height), sizeof(height));
         file.write(reinterpret_cast<char *>(data.data()), data.size());
     }
 
-    void saveAsPPM(const std::string &filename) {
-        std::ofstream file(filename);
+    void saveAsPPM(const string &filename) {
+        ofstream file(filename);
         file << "P3\n"
              << width << " " << height << "\n255\n";
 
@@ -41,10 +43,10 @@ struct IMX {
 };
 
 int main() {
-    int width = 200, height = 200;
+    int width = 5, height = 5;
     IMX img(width, height);
 
-    int blockSize = 50;
+    int blockSize = 5;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             bool isGreen = ((x / blockSize) + (y / blockSize)) % 2 == 0;
@@ -55,7 +57,7 @@ int main() {
     img.save("output.imx");
     img.saveAsPPM("output.ppm");
 
-    std::cout << "Saved as output.imx and output.ppm\n";
+    cout << "Saved as output.imx and output.ppm\n";
 
     return 0;
 }
