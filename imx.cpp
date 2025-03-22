@@ -46,10 +46,10 @@ struct IMX {
 
 int main() {
     // test image
-    int width = 200, height = 200;
+    int width = 400, height = 250;
     IMX img(width, height);
 
-    int blockSize = 50;
+    int blockSize = 80;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             bool isGreen = ((x / blockSize) + (y / blockSize)) % 2 == 0;
