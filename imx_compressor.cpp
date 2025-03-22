@@ -78,25 +78,33 @@ void compressIMX(const string &inputFile, const string &outputFile, int quality)
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 5 || string(argv[1]) != "compress") {
-        cout << "Usage: " << argv[0] << " compress --quality <value> <input_file> <output_file>\n";
+    // validate arguments
+    if (argc != 6 || string(argv[1]) != "compress") {
+        cerr << "Usage: " << argv[0] << " compress --quality <value> <input_file> <output_file>\n";
         return 1;
     }
 
-    string qualityArg = argv[2];
-    if (qualityArg.find("--quality") != 0) {
+    // validate quality flag
+    if (string(argv[2]) != "--quality") {
         cerr << "Error: Missing --quality flag\n";
         return 1;
     }
 
-    int quality = stoi(qualityArg.substr(9));
+    int quality;
+    try {
+        quality = stoi(argv[3]);
+    } catch (const invalid_argument &) {
+        cerr << "Error: Invalid quality value\n";
+        return 1;
+    }
+
     if (quality < 1 || quality > 100) {
         cerr << "Error: Quality must be between 1 and 100\n";
         return 1;
     }
 
-    string inputFile = argv[3];
-    string outputFile = argv[4];
+    string inputFile = argv[4];
+    string outputFile = argv[5];
 
     compressIMX(inputFile, outputFile, quality);
     return 0;
